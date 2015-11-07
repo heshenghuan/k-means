@@ -1,7 +1,7 @@
 # k-means algorithm
 
 ###Introduction
-> An python implementation of k-means clustering algorithm.<br>
+> A python implementation of k-means clustering algorithm.<br>
 > Using numpy.array model to represent matrix and vector.<br>
 
 ##Data format
