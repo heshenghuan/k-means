@@ -87,7 +87,7 @@ class KMeans:
         m = len(self.samples)
         id_list = []
         while len(id_list)<=self.K:
-            index = random.randint(0,m)
+            index = random.randint(0,m-1)
             if not index in id_list:
                 id_list.append(index)
         for i in id_list:
@@ -155,3 +155,79 @@ class KMeans:
                 break
 
         print "\nTotally used %d round to finished clustering process."%(rd-1)
+
+    def saveModel(self, path=None):
+        """
+        Saves the model as a text file by following format:
+
+        K=<value> D=<value>
+        <center> <index1>:<value1> <index2>:<value2> ...
+        .
+        .
+        .
+        In the first line, the K and D mean the k value and feature dimension,
+        respectively.
+        Each line contains an instance and is ended by a '\\n' character. 
+        <center> and <index>:<value> are sperated by a '\\t' character. 
+        But <index>:<value> and <index>:<value> are sperated by a \' \' character.
+
+        Parameter path is the directory path where you want to save the model.
+        """
+        if not path:
+            path = r'./'
+        output = open(path+r"centers.utf8",'w')
+        output.write("K=%d Dimension=%d\n"%(self.K,self.feat_dimension))
+        for i in xrange(self.K):
+            index = "%d"%(i+1)
+            output.write(index+"\t")
+            center = self.centers[i]
+            for j in xrange(1,self.feat_dimension+1):
+                if center[0,j] != 0.:
+                    output.write("%d:%f "%(j,center[0,j]))
+            output.write('\n')
+
+    def loadModel(self, path=None):
+        """
+        Load model from file. The file shoud comply with the following format.
+
+        K=<value> D=<value>
+        <center> <index1>:<value1> <index2>:<value2> ...
+        .
+        .
+        .
+        In the first line, the K and D mean the k value and feature dimension,
+        respectively.
+        Each line contains an instance and is ended by a '\\n' character. 
+        <center> and <index>:<value> are sperated by a '\\t' character. 
+        But <index>:<value> and <index>:<value> are sperated by a \' \' character.
+
+        Parameter path is the directory path where you want to save the model.
+        """
+        if not path:
+            path = r'./'
+        input_data = codecs.open(path+r"centers.utf8",'r','utf-8')
+        first = True
+        self.centers = []
+        self.K = 0
+        self.feat_dimension = 0
+        print "Loading centers data from file",
+        for line in input_data.readlines():
+            rawText = line.strip()
+            if first:
+                tmp = rawText.split()
+                self.K = int(tmp[0].split('=')[1])
+                self.feat_dimension = int(tmp[1].split('=')[1])
+                first = False
+                continue
+            tmp = rawText.split('\t')
+            tmp = tmp[-1].split(' ')
+            vec = np.zeros((1,self.feat_dimension+1))
+            for i in xrange(len(tmp)):
+                [index, value] = tmp[i].split(':')
+                vec[0,int(index)] = float(value)
+            self.centers.append(vec)
+            print '.',
+        print
+        print "Loading done."
+        self.printCenter()
+
