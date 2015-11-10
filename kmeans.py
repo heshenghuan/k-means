@@ -22,7 +22,7 @@ class KMeans:
         
     def printInfo(self):
         print "sample size:      ", len(self.samples)
-        print "clusters size:    ", self.k
+        print "clusters size:    ", self.K
         print "feature dimension:", self.feat_dimension
 
     def read_samples(self, datafile=None):
