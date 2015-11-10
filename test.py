@@ -14,3 +14,6 @@ if __name__ == "__main__":
     case.read_samples(r"trainDigits.data")
     case.printInfo()
     case.clustering(delta_thrld=0.5)
+
+    case.saveModel()
+    case.loadModel()
