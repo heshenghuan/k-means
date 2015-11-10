@@ -148,7 +148,7 @@ class KMeans:
                 print "clus %2d:"%(i+1), "%.4f"%delta[i]
             
             rd += 1
-            if max(delta) < delta_thrld:
+            if sum(delta)/len(delta) < delta_thrld:
                 print "Reach the minimal change value threshold!"
                 print "\nThe center of each cluster is:\n"
                 self.printCenter()
